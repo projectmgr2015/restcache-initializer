@@ -3,7 +3,6 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import groovy.transform.Field
 import io.codearte.jfairy.Fairy
-import io.codearte.jfairy.producer.DateProducer
 import io.codearte.jfairy.producer.text.TextProducer
 import org.bson.Document
 
@@ -15,26 +14,28 @@ import java.util.logging.Logger
 @Field Logger log = Logger.getLogger("")
 
 @Field final int HOW_MANY = 1000000
-@Field final int HOW_MANY_CACHE = 6
-@Field MongoClient mongoClient = new MongoClient()
+@Field final int HOW_MANY_CACHE = 20
+@Field final boolean CLEAN = false
+@Field MongoClient mongoClient = new MongoClient('mongo.projectmgr2015.tk')
 @Field MongoDatabase database = mongoClient.getDatabase('cache')
 @Field MongoCollection<Document> apiCollection = database.getCollection('api')
 @Field MongoCollection<Document> cacheCollection = database.getCollection('cache')
 
 @Field Fairy fairy = Fairy.create(new Locale('PL'))
-@Field DateProducer dateProducer = fairy.dateProducer()
 @Field TextProducer textProducer = fairy.textProducer()
 
 // MAIN
 cleanCollections()
-log.info 'creating api'
 def apis = createApis()
 log.info 'creating cache'
 HOW_MANY_CACHE.times {
+    println it
     createCacheKeys(apis)
 }
-log.info 'creating index'
 createIndexes()
+if(CLEAN) {
+    cleanCollections()
+}
 
 def cleanCollections() {
     apiCollection.deleteMany(new Document())
@@ -42,10 +43,10 @@ def cleanCollections() {
 }
 
 private List createApis() {
+    log.info 'creating api'
     List<Document> apis = (1..HOW_MANY).collect {
         return new Document([
                 _id    : UUID.randomUUID().toString(),
-                _class: 'pl.mjasion.restcache.domain.Api',
         ])
     }
     apiCollection.insertMany(apis)
@@ -60,14 +61,15 @@ private List createCacheKeys(List apis) {
                 api: api,
                 key: textProducer.latinWord(1)+'_'+rand.nextLong(),
                 value: textProducer.latinWord(4),
-                _class: 'pl.mjasion.restcache.domain.Cache',
         )
     }
-    log.info 'shuffling'
-    Collections.shuffle(comments)
+//    log.info 'shuffling'
+//    Collections.shuffle(comments)
     cacheCollection.insertMany(comments)
 }
 
 private void createIndexes() {
+    log.info 'creating index'
     cacheCollection.createIndex(new Document('api': 1, 'key': 1))
+    cacheCollection.createIndex(new Document('api': 1))
 }
