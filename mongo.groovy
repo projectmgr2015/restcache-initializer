@@ -6,8 +6,8 @@ import io.codearte.jfairy.Fairy
 import io.codearte.jfairy.producer.text.TextProducer
 import org.bson.Document
 
-@Grab('io.codearte.jfairy:jfairy:0.4.0')
-@Grab('org.mongodb:mongo-java-driver:3.0.2')
+@Grab('io.codearte.jfairy:jfairy:0.4.3')
+@Grab('org.mongodb:mongo-java-driver:3.0.3')
 
 import java.util.logging.Logger
 
