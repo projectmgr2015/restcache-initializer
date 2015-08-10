@@ -13,9 +13,9 @@ import java.util.logging.Logger
 
 @Field Logger log = Logger.getLogger("")
 
-@Field final int HOW_MANY = 1000000
+@Field final int HOW_MANY = 1
 @Field final int HOW_MANY_CACHE = 20
-@Field final boolean CLEAN = false
+@Field final boolean CLEAN = true
 @Field MongoClient mongoClient = new MongoClient('mongo.projectmgr2015.tk')
 @Field MongoDatabase database = mongoClient.getDatabase('cache')
 @Field MongoCollection<Document> apiCollection = database.getCollection('api')
@@ -38,6 +38,7 @@ if(CLEAN) {
 }
 
 def cleanCollections() {
+    println 'cleaning collections'
     apiCollection.deleteMany(new Document())
     cacheCollection.deleteMany(new Document())
 }
