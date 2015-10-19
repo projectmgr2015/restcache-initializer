@@ -13,10 +13,10 @@ import java.util.logging.Logger
 
 @Field Logger log = Logger.getLogger("")
 
-@Field final int HOW_MANY = 1
+@Field final int HOW_MANY = 100000
 @Field final int HOW_MANY_CACHE = 20
-@Field final boolean CLEAN = true
-@Field MongoClient mongoClient = new MongoClient('mongo.projectmgr2015.tk')
+@Field final boolean CLEAN = false
+@Field MongoClient mongoClient = new MongoClient('public.mongo.projectmgr2015.tk')
 @Field MongoDatabase database = mongoClient.getDatabase('cache')
 @Field MongoCollection<Document> apiCollection = database.getCollection('api')
 @Field MongoCollection<Document> cacheCollection = database.getCollection('cache')
@@ -25,7 +25,7 @@ import java.util.logging.Logger
 @Field TextProducer textProducer = fairy.textProducer()
 
 // MAIN
-cleanCollections()
+//cleanCollections()
 def apis = createApis()
 log.info 'creating cache'
 HOW_MANY_CACHE.times {
