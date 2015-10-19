@@ -14,7 +14,7 @@ import java.util.logging.Logger
 @Field Logger log = Logger.getLogger("")
 
 @Field final int HOW_MANY = 100000
-@Field final int HOW_MANY_CACHE = 20
+@Field final int HOW_MANY_CACHE = 10
 @Field final boolean CLEAN = false
 @Field MongoClient mongoClient = new MongoClient('public.mongo.projectmgr2015.tk')
 @Field MongoDatabase database = mongoClient.getDatabase('cache')
